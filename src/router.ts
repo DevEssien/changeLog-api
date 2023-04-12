@@ -6,7 +6,7 @@ const route = express.Router();
  * Products
 */
 route.get('/product', (req, res, next) => {
-    return res.json({ message: 'Getting the route'})
+    return res.json({ message: 'Getting the products'})
 });
 
 route.get('/product/:id', (req, res, next) => {});

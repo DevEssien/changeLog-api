@@ -4,6 +4,7 @@ import cors from 'cors';
 
 import route from './router';
 import { protect } from './modules/auth'
+import { signup, signin } from './handlers/user';
 
 const app = express();
 
@@ -23,5 +24,8 @@ app.get('/', (req, res, next) => {
 });
 
 app.use('/api', protect, route);
+
+app.post('/user/signup', signup);
+app.post('/user/signin', signin)
 
 export default app;

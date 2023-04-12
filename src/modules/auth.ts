@@ -1,10 +1,11 @@
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 
 export const createJWT = (user) => {
     const token = jwt.sign({
         id: user.id,
         email: user.username
-    }, process.env.SECRET_JWT, 
+    }, process.env.JWT_SECRET, 
     {expiresIn: '1hr'});
     return token;
 }
@@ -23,7 +24,7 @@ export const protect = (req, res, next) => {
         return;
     }
     try {
-        const user = jwt.verify(token, process.env.SECRET_JWT);
+        const user = jwt.verify(token, process.env.JWT_SECRET);
         req.user = user;
         next()
     } catch(error) {
@@ -33,4 +34,12 @@ export const protect = (req, res, next) => {
         return;
     }
     
+}
+
+export const hashPassword = (password) => {
+    return bcrypt.hash(password, 12);
+}
+
+export const comparePasswords = (password, hashPassword) => {
+    return bcrypt.compare(password, hashPassword)
 }
