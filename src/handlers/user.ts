@@ -20,7 +20,6 @@ export const signup = async (req, res, next) => {
                 password: await hashPassword(req.body.password)
             },
         });
-        console.log('here')
         const token = createJWT(newUser);
         return res.status(201).json({ 
             status: 'Successful',
