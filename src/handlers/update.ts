@@ -14,7 +14,7 @@ export const getOneUpdate = async (req, res, next) => {
 export const getUpdates = async (req, res, next) => {
     const products = await prisma.product.findMany({
         where: {
-            id: req.user.id
+            belongsToId: req.user.id
         },
         include: {
             updates: true
@@ -40,7 +40,11 @@ export const createUpdate = async (req, res, next) => {
         });
     }
     const update = await prisma.update.create({
-        data: req.body
+        data: {
+            title: req.body.title,
+            body: req.body.body,
+            product: { connect: {id: product.id}}
+        }
     });
     return res.json({
         data: update 
@@ -50,7 +54,7 @@ export const createUpdate = async (req, res, next) => {
 export const updateUpdate = async (req, res, next) => {
     const products = await prisma.product.findMany({
         where: {
-            id: req.user.id
+            belongsToId: req.user.id
         },
         include: {
             updates: true
@@ -80,7 +84,7 @@ export const updateUpdate = async (req, res, next) => {
 export const deleteUpdate  = async (req, res, next) => {
     const products = await prisma.product.findMany({
         where: {
-            id: req.user.id
+            belongsToId: req.user.id
         },
         include: {
             updates: true
@@ -102,6 +106,7 @@ export const deleteUpdate  = async (req, res, next) => {
         }
     });
     return res.json({
+        message: 'Deleted',
         data: deleted
     });
 }

@@ -2,7 +2,8 @@ import express from 'express';
 import { body, oneOf, validationResult } from 'express-validator'
 import { handleInputErrors } from './modules/middlewares';
 
-import { createProduct, deleteProduct, getOneProduct, getProducts } from './handlers/product' 
+import { createProduct, deleteProduct, getOneProduct, getProducts, updateOneProduct } from './handlers/product' 
+import { createUpdate, deleteUpdate, getOneUpdate, getUpdates, updateUpdate } from './handlers/update';
 
 const route = express.Router();
 
@@ -13,7 +14,7 @@ route.get('/product', getProducts);
 
 route.get('/product/:id', getOneProduct);
 
-route.put('/product/:id', body('name').isString(), handleInputErrors, (req, res, next) => {});
+route.put('/product/:id', body('name').isString(), handleInputErrors, updateOneProduct);
 
 route.post('/product', body('name').isString(), handleInputErrors, createProduct );
 
@@ -22,24 +23,24 @@ route.delete('/product/:id', deleteProduct);
 /**
  * updates
  */
-route.get('/update', (req, res, next) => {});
+route.get('/update', getUpdates);
 
-route.get('/update/:id', (req, res, next) => {});
+route.get('/update/:id', getOneUpdate);
 
 route.put('/update/:id',
     body('title').optional(), 
     body('body').optional(), 
-    body('status').isIn(['IN_PROGRESS', 'SHIPPED', 'DEPRICATED']),
+    body('status').isIn(['IN_PROGRESS', 'SHIPPED', 'DEPRICATED']).optional(),
     body('version').optional(), 
-    (req, res, next) => {});
+    updateUpdate);
 
 route.post('/update',
     body('title').exists().isString(), 
     body('body').exists().isString(), 
     body('productId').exists().isString(),
-    (req, res, next) => {});
+    createUpdate);
 
-route.delete('/update/:id', (req, res, next) => {});
+route.delete('/update/:id', deleteUpdate);
 
 /**
  * Update Points

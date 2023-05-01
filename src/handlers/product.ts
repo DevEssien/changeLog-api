@@ -49,7 +49,7 @@ export const createProduct = async (req, res, next) => {
     });
 }
 
-export const upadateOneProduct = async (req, res, next) => {
+export const updateOneProduct = async (req, res, next) => {
     const updated = await prisma.product.update({
         where: {
             id_belongsToId: {
