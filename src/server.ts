@@ -28,4 +28,11 @@ app.use('/api', protect, route);
 app.post('/user/signup', signup);
 app.post('/user/signin', signin)
 
+app.use((error, req, res, next) => {
+    console.log('error ', error);
+    return res.json({
+        message: "oops! there was an error"
+    })
+})
+
 export default app;
