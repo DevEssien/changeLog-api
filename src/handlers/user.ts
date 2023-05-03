@@ -14,20 +14,26 @@ export const signup = async (req, res, next) => {
                 message: 'User already exist'
             });
         }
-        const newUser = await prisma.user.create({
-            data: {
-                username: req.body.username,
-                password: await hashPassword(req.body.password)
-            },
-        });
-        const token = createJWT(newUser);
-        return res.status(201).json({ 
-            status: 'Successful',
-            message: 'Created a new user',
-            token 
-        });
+        try {
+            const newUser = await prisma.user.create({
+                data: {
+                    username: req.body.username,
+                    password: await hashPassword(req.body.password)
+                },
+            });
+            const token = createJWT(newUser);
+            return res.status(201).json({ 
+                status: 'Successful',
+                message: 'Created a new user',
+                token 
+            });
+        } catch(error) {
+            error.type = 'Input';
+            next(error)
+        }
     } catch(error) {
-        console.log(error)
+        console.log(error);
+        next(error)
     }
 }
 

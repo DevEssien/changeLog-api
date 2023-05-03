@@ -19,8 +19,9 @@ app.use((req, res, next) => {
 });
 
 app.get('/', (req, res, next) => {
-    res.status(200);
-    res.json({ message: 'hello'});
+    setTimeout(() => {
+        next(new Error('hello'));
+    }, 1);
 });
 
 app.use('/api', protect, route);
@@ -30,9 +31,13 @@ app.post('/user/signin', signin)
 
 app.use((error, req, res, next) => {
     console.log('error ', error);
-    return res.json({
-        message: "oops! there was an error"
-    })
+    if (error.type === 'auth') {
+        res.status(401).json({ message: 'Unauthorized'});
+    } else if (error.type === 'input') {
+        res.status(400).json({ message: 'Invalid Input'});
+    } else {
+        res.status(500).json({ message: 'server side error'});
+    }
 })
 
 export default app;

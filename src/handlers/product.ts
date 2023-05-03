@@ -1,7 +1,6 @@
 import prisma from "../db"
 
 export const getProducts = async (req, res, next) => {
-    console.log('req ', req.user)
     const user  = await prisma.user.findUnique({
         where: {
             id: req.user.id
@@ -36,17 +35,21 @@ export const getOneProduct = async (req, res, next) => {
 }
 
 export const createProduct = async (req, res, next) => {
-    const newProduct = await prisma.product.create({
-        data: {
-            name: req.body.name,
-            belongsToId: req.user.id
-        }
-    });
-    return res.json({
-        data: {
-            product: newProduct
-        }
-    });
+    try {
+        const newProduct = await prisma.product.create({
+            data: {
+                name: req.body.name,
+                belongsToId: req.user.id
+            }
+        });
+        return res.json({
+            data: {
+                product: newProduct
+            }
+        });
+    } catch(error) {
+        next(error)
+    }
 }
 
 export const updateOneProduct = async (req, res, next) => {
